@@ -1,0 +1,109 @@
+---
+title: "Insurance Premium Prediction Multiple Linear Regression"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+# INSURANCE PREMIUMS PREDICTIONS USING LINEAR REGRESSION
+
+The aim of this project is use the insurance dataset to come up with a model that can predict the amount an individual is supposed to pay as insurance expenses considering a number of factors such as age, BMI, sex, number of children, smoker status, and region.
+
+```{r}
+# importing important libraries
+
+library(tidyverse)
+library(janitor)
+library(dlookr)
+library(performance)
+```
+
+```{r}
+# reading in  the dataset 
+
+df <- read_csv("~/R projects/insurance expenses ML/Insurances-expenses-Prediction-in-R/Insurancedata.csv")
+```
+
+```{r}
+df %>% head()
+```
+
+```{r}
+ggplot(df, aes(age))+
+  geom_histogram(fill='blue', bins = 10)
+```
+
+```{r}
+ggplot(df, aes(bmi))+
+  geom_histogram(fill='yellow',bins = 10)
+```
+
+```{r}
+ggplot(df, aes(expenses))+
+  geom_histogram(fill='lightgreen', bins = 10)
+```
+
+```{r}
+ggplot(df, aes(region, fill=region))+
+  geom_bar()
+```
+
+```{r}
+ggplot(df,aes(sex, fill=sex))+
+  geom_bar()
+```
+
+```{r}
+ggplot(df, aes(age, expenses, fill=smoker))+
+  geom_point(color='grey')+
+  geom_smooth()
+```
+
+```{r}
+ggplot(df, aes(bmi, expenses, fill=smoker))+
+  geom_point(color='grey')+
+  geom_smooth(method = 'lm')
+```
+
+```{r}
+df %>% group_by(smoker) %>% summarise(average_expenses = mean(expenses)) %>% 
+  ggplot(aes(smoker, average_expenses, fill=smoker))+
+    geom_bar(stat = 'identity')
+```
+
+```{r}
+df %>% group_by(sex) %>% summarise(average_expenses = mean(expenses)) %>% 
+  ggplot(aes(sex, average_expenses, fill=sex))+
+    geom_bar(stat = 'identity')
+```
+
+```{r}
+df %>% group_by(region) %>% summarise(average_expenses = mean(expenses)) %>% 
+  ggplot(aes(region, average_expenses, fill=region))+
+    geom_bar(stat = 'identity')
+```
+
+```{r}
+ggplot(df, aes(children, expenses))+
+  geom_point(color='red', alpha=0.7)
+```
